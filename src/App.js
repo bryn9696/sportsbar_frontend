@@ -1,25 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import SignUp from "./components/SignUp";
+import Login from "./components/Login";
+import Posts from "./components/PostList"; // A component to display posts
+import CreatePost from "./components/CreatePost"; // A component to display posts
+import Navbar from "./components/Navbar"; // Optional Navbar component
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const App = () => {
+    return (
+        <Router>
+            <div className="app-container">
+                <Navbar /> {/* Optional, for navigation */}
+                <Routes>
+                    <Route path="/signup" element={<SignUp />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/posts" element={<Posts />} />
+                    <Route path="/posts" element={<CreatePost />} />
+                    {/* Add other routes as needed */}
+                    <Route path="/" element={<h1>Welcome to SportsBar!</h1>} />
+                </Routes>
+            </div>
+        </Router>
+    );
+};
 
 export default App;
