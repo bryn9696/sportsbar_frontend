@@ -26,11 +26,25 @@ const Login = () => {
                 username,
                 password,
             });
+
+            console.log("Login response:", response.data); // Check the full response
+
+            // Assuming the token is in response.data.token
             if (response.status === 200) {
-                alert("Login successful!");
-                navigate("/dashboard"); // Redirect after successful login
+                const token = response.data.token;
+                console.log("Received token:", token);
+
+                if (token) {
+                    // Save the token to localStorage
+                    localStorage.setItem("token", token);
+                    alert("Login successful!");
+                    navigate("/feed"); // Redirect after successful login
+                } else {
+                    setError("Token not received. Login failed.");
+                }
             }
         } catch (err) {
+            console.error("Login error:", err);
             setError(
                 err.response?.data || "Invalid credentials. Please try again."
             );

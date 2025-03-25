@@ -1,24 +1,44 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import axios from "axios";
 
 function PostForm({ addPost }) {
   const [content, setContent] = useState('');
   const [sport, setSport] = useState('');
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
+  // Example of storing the Auth0 token
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-    const newPost = {
-      content,
-      sport,
-      timestamp: new Date().toISOString(),
-    };
+    const token = localStorage.getItem("token"); // Retrieve token from localStorage
 
-    addPost(newPost);
+    if (!token) {
+        setError("You need to be logged in to submit a post.");
+        return;
+    }
 
-    // Clear the form fields
-    setContent('');
-    setSport('');
+    try {
+        const postData = { /* your post data */ };
+
+        // Make the POST request with token in Authorization header
+        const response = await axios.post(
+            "http://localhost:8080/api/posts",  // your post submission endpoint
+            postData,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,  // Add the token here
+                },
+            }
+        );
+        console.log(token);
+        console.log("Post submitted successfully", response.data);
+        // Handle successful submission (e.g., reset form, show success message)
+    } catch (err) {
+        console.log(token);
+        console.error("Error submitting post:", err);
+        setError("Error submitting post. Please try again.");
+    }
   };
+
 
   return (
     <form onSubmit={handleSubmit}>

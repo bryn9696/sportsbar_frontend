@@ -7,23 +7,33 @@ const PostList = ({ userId }) => {
 
   useEffect(() => {
     const fetchPosts = async () => {
-      try {
-        const response = await axios.get("/api/users/posts", {
-          params: { userId },
-        });
-        setPosts(response.data);
+      const token = localStorage.getItem("token"); // Retrieve the token from local storage
+      if (!token) {
+        console.error("No token found. User is not authenticated.");
         setLoading(false);
+        return;
+      }
+
+      try {
+        const response = await axios.get("http://localhost:8080/api/users/posts/posts", {
+          params: { userId },
+          headers: {
+            Authorization: `Bearer ${token}`, // Include token in Authorization header
+          },
+        });
+        setPosts(response.data); // Store posts in state
+        setLoading(false); // Set loading to false after the posts are fetched
       } catch (err) {
-        console.error("Failed to fetch posts", err);
+        console.error("Failed to fetch posts", err); // Log error if request fails
         setLoading(false);
       }
     };
 
-    fetchPosts();
+    fetchPosts(); // Call the function to fetch posts on component mount
   }, [userId]);
 
   if (loading) {
-    return <div>Loading posts...</div>;
+    return <div>Loading posts...</div>; // Show loading state while fetching posts
   }
 
   return (
@@ -38,7 +48,7 @@ const PostList = ({ userId }) => {
             </li>
           ))
         ) : (
-          <p>No posts found.</p>
+          <p>No posts found.</p> // Show message if no posts exist
         )}
       </ul>
     </div>

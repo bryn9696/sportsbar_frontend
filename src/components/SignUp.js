@@ -30,16 +30,17 @@ const SignUp = () => {
             setError("Passwords do not match.");
             return;
         }
-    
+        
         try {
             const response = await axios.post(
-                "http://localhost:8080/api/users/signup",
+                "http://localhost:8080/api/users/signup", 
                 {
                     username: username, // Ensure this matches the backend's `User` object
                     password: password,
                     email: email || null, // Handle optional email
                 }
             );
+            
             if (response.status === 201) {
                 alert("Account created successfully!");
                 navigate("/login");
